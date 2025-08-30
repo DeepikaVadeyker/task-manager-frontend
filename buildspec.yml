@@ -1,0 +1,41 @@
+# version: 0.2
+# env:
+#   variables:
+#     AWS_REGION: us-east-2
+#     FRONTEND_S3_BUCKET: taskmgr-frontend-deploy
+#     REACT_APP_API_URL: https://<api-gateway-id>.execute-api.us-east-2.amazonaws.com/prod
+# phases:
+#   install:
+#     runtime-versions:
+#       nodejs: 18
+#     commands:
+#       - npm ci
+#   build:
+#     commands:
+#       - echo "Building React app..."
+#       - npm run build
+#       - echo "Deploying to S3..."
+#       - aws s3 sync build/ s3://$FRONTEND_S3_BUCKET --delete
+# artifacts:
+#   files:
+#     - build/**/*
+version: 0.2
+phases:
+  install:
+    runtime-versions:
+      nodejs: 18
+    commands:
+      - npm install
+  build:
+    commands:
+      - npm run build
+  post_build:
+    commands:
+      - aws s3 sync build/ s3://task-manager-frontend --delete
+      - aws cloudfront create-invalidation \
+          --distribution-id CLOUDFRONT_ID \
+          --paths "/*"
+artifacts:
+  files:
+    - '**/*'
+  base-directory: build
