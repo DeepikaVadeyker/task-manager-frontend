@@ -2,6 +2,8 @@ import React, { useEffect, useState } from "react";
 import { listTasks, createTask, updateTask, deleteTask } from "./api";
 import AddTaskForm from "./components/AddTaskForm";
 import TaskList from "./components/TaskList";
+import Chatbot from "./components/Chatbot";
+import './components/chatbot.css';
 
 export default function App() {
   const [tasks, setTasks] = useState([]);
@@ -34,6 +36,10 @@ export default function App() {
       <h1>Task Manager</h1>
       <AddTaskForm onCreate={handleCreate} />
       <TaskList tasks={tasks} onToggleDone={handleToggle} onDelete={handleDelete} />
+      <div className="chatbot-section">
+      <h2>AI Chatbot</h2>
+      <Chatbot />
+    </div>
     </div>
   );
 }
